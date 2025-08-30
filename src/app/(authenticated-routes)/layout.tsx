@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import { useLayoutEffect } from "react";
+import { useRouter } from 'next/navigation';
+import { useLayoutEffect } from 'react';
 
 export default function RootLayout({
   children,
@@ -11,9 +11,7 @@ export default function RootLayout({
   const router = useRouter();
 
   useLayoutEffect(() => {
-    (async () => {
-
-    })();
+    (async () => {})();
   }, []);
 
   return <>{children}</>;

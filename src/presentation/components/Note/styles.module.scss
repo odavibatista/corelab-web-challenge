@@ -1,17 +1,22 @@
-@import 'globals.scss';
+@import '../../../app/globals.scss';
 
 .yellow {
-    background-color: $y;
+  background-color: $y;
 }
 
 .blue {
-    background-color: $b;
+  background-color: $b;
 }
 
 .red {
-    background-color: $r;
+  background-color: $r;
 }
 
 .green {
-    background-color: $g;
+  background-color: $g;
+}
+
+.note {
+  border-radius: 8px;
+  border: 1px solid $gr;
 }

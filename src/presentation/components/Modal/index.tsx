@@ -1,9 +1,9 @@
-import s from "./styles.module.scss";
+import s from './styles.module.scss';
 
 export interface IModalData {
   message: string;
   buttonText?: string;
-  type: "success" | "error" | "warning";
+  type: 'success' | 'error' | 'warning';
 }
 
 interface ModalProps {
@@ -24,7 +24,7 @@ const Modal = ({ modal, openCloseModal }: ModalProps) => {
         <p className={s.message}>{message}</p>
         <div className={s.button}>
           <button onClick={handleClick}>
-            {modal.buttonText ? modal.buttonText : "Ok"}
+            {modal.buttonText ? modal.buttonText : 'Ok'}
           </button>
         </div>
       </div>
