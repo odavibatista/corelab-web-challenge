@@ -1,9 +1,26 @@
+"use client"
+
+import { useEffect } from "react";
+import { useHome } from "../providers/home-data-provider";
+import { redirect } from "next/navigation";
+import LoadingScreen from "../presentation/components/Loading";
+
 export default function Home() {
-  return (
-    <div className={''}>
-      <main className={''}>
-        <h1>Hello World</h1>
-      </main>
-    </div>
-  );
+  const { homeData, isHomeDataLoading } = useHome();
+
+    useEffect(() => {
+      (async () => {
+        if (!homeData) {
+          redirect("/sign-in");
+        } else {
+          redirect("/dashboard");
+        }
+      })();
+    }, [homeData]);
+
+    return (
+      <>
+        {isHomeDataLoading && <LoadingScreen />}
+      </>
+    );
 }

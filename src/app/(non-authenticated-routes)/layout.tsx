@@ -1,18 +1,23 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { useLayoutEffect } from 'react';
+import { redirect } from "next/navigation";
+import { useLayoutEffect } from "react";
+import { useHome } from "../../providers/home-data-provider";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const router = useRouter();
+  const { homeData, isHomeDataLoading } = useHome();
 
   useLayoutEffect(() => {
-    (async () => {})();
-  }, []);
+    (async () => {
+      if (homeData && !isHomeDataLoading) {
+        redirect("/dashboard");
+      }
+    })();
+  }, [homeData]);
 
   return <>{children}</>;
 }
