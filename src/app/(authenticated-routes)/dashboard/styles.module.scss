@@ -42,6 +42,14 @@
   height: 40px;
   border: 2px solid $gr;
   width: 300px;
+
+  &:focus {
+    outline: 3px solid $gr;
+  }
+}
+
+.search_icon {
+  margin-left: 10px;
 }
 
 .search_input {
@@ -53,7 +61,7 @@
   width: 100%;
 
   &:focus {
-    outline: 3px solid $gr;
+    outline: none;
   }
 }
 

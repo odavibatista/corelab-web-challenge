@@ -11,6 +11,8 @@ import refreshPage from '../../../server/utils/refresh.function';
 import Modal from '../../../presentation/components/Modal';
 import { useRouter } from 'next/navigation';
 import LoadingScreen from '../../../presentation/components/Loading';
+import Image from 'next/image';
+import searchNotes from '../../../api/endpoints/notes/search-notes.request';
 
 export default function DashboardPage() {
   const { modal, setModal, openCloseModal } = useModal();
@@ -33,6 +35,20 @@ export default function DashboardPage() {
     setErrorMessage(message);
   }
 
+  const handleSearchNotes = async (content: string) => {
+    const token = sessionStorage.getItem('session');
+    try {
+      const data = await searchNotes(content, token);
+      if ('statusCode' in data) {
+        setError(data.message);
+      } else {
+        setNotes(data);
+      }
+    } catch (error: any) {
+      setError(error.message);
+    }
+  };
+
   const handleNoteStar = async (noteId: string) => {
     const token = sessionStorage.getItem('session');
     try {
@@ -47,10 +63,14 @@ export default function DashboardPage() {
         setError(data.message);
         setModal({ message: data.message, type: 'error' });
       } else {
-        setModal({
-          message: 'Nota alterada com sucesso!',
-          type: 'success',
-        });
+        const notes = await browseNotes(token);
+
+        if ('statusCode' in notes) {
+          setError(notes.message);
+          setModal({ message: notes.message, type: 'error' });
+        } else {
+          setNotes(notes);
+        }
       }
     } catch (error: any) {
       setError(error.message);
@@ -81,18 +101,28 @@ export default function DashboardPage() {
       <section className={s.top}>
         <h1 className={s.title}>Core Notes</h1>
         <span className={s.search_bar}>
+          <Image
+            src="/search-icon.png"
+            alt="Search"
+            width={16}
+            height={16}
+            className={s.search_icon}
+          />
           <input
             type="text"
             placeholder="Search notes..."
             className={s.search_input}
+            name="search"
+            onChange={(e) => handleSearchNotes(e.target.value)}
           />
         </span>
       </section>
-      <section className={`${s.favorites} ${s.section}`}>
-        <h4 className={s.section_title}>Favorites</h4>
-        <div className={s.cards}>
-          {!areNotesLoading && starredNotes && starredNotes.length > 0 ? (
-            starredNotes.map((note) => (
+
+      {!areNotesLoading && starredNotes && starredNotes.length > 0 ? (
+        <section className={`${s.favorites} ${s.section}`}>
+          <h4 className={s.section_title}>Favorites</h4>
+          <div className={s.cards}>
+            {starredNotes.map((note) => (
               <Note
                 key={note.id_note}
                 note_title={note.note_title}
@@ -103,17 +133,17 @@ export default function DashboardPage() {
                 user_id={note.user_id}
                 starNote={() => handleNoteStar(note.id_note)}
               />
-            ))
-          ) : (
-            <p>No notes found</p>
-          )}
-        </div>
-      </section>
-      <section className={`${s.others} ${s.section}`}>
-        <h4 className={s.section_title}>Others</h4>
-        <div className={s.cards}>
-          {!areNotesLoading && otherNotes && otherNotes.length > 0 ? (
-            otherNotes.map((note) => (
+            ))}
+          </div>
+        </section>
+      ) : (
+        <></>
+      )}
+      {!areNotesLoading && otherNotes && otherNotes.length > 0 ? (
+        <section className={`${s.other} ${s.section}`}>
+          <h4 className={s.section_title}>Other</h4>
+          <div className={s.cards}>
+            {otherNotes.map((note) => (
               <Note
                 key={note.id_note}
                 note_title={note.note_title}
@@ -124,12 +154,12 @@ export default function DashboardPage() {
                 user_id={note.user_id}
                 starNote={() => handleNoteStar(note.id_note)}
               />
-            ))
-          ) : (
-            <p>No notes found</p>
-          )}
-        </div>
-      </section>
+            ))}
+          </div>
+        </section>
+      ) : (
+        <></>
+      )}
       {modal?.message !== '' && (
         <Modal
           modal={modal}
