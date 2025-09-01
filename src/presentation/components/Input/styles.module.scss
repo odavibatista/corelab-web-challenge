@@ -29,6 +29,18 @@
   width: inherit;
 }
 
+.transparent {
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 5px 0;
+
+  &:focus {
+    outline: none;
+  }
+}
+
 .error_message {
   color: red;
   margin-top: 5px;

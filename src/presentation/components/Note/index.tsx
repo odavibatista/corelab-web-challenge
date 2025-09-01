@@ -1,5 +1,12 @@
+import Image from 'next/image';
 import s from './styles.module.scss';
 import { JSX, useState } from 'react';
+import InputComponent from '../Input';
+import z from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import ColorPalette from './ColorPalette';
+import Button from '../Button';
 
 export interface INoteProps {
   id_note: string;
@@ -12,8 +19,15 @@ export interface INoteProps {
   changeColor?: (noteData: { note_id: string; note_color: string }) => void;
   updateNote?: (noteData: { note_title: string; note_text: string }) => void;
 
-  deleteNote?: () => void;
+  deleteNote?: (noteData: { note_id: string }) => void;
 }
+
+const noteEditionSchema = z.object({
+  note_title: z.string().min(2, { message: 'Campo obrigatório.' }),
+  note_text: z.string().min(2, { message: 'Campo obrigatório.' }),
+});
+
+type NoteEditionSchemaInterface = z.infer<typeof noteEditionSchema>;
 
 const Note = ({
   id_note,
@@ -34,6 +48,20 @@ const Note = ({
   });
   const [isColorPickerOpen, setColorPickerOpen] = useState(false);
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+  } = useForm<NoteEditionSchemaInterface>({
+    resolver: zodResolver(noteEditionSchema),
+    mode: 'all',
+  });
+
+  const onSubmit = (data: NoteEditionSchemaInterface) => {
+    handleUpdate(data);
+  };
+
   const star = () => {
     handleStar({ note_id: id_note });
   };
@@ -42,32 +70,122 @@ const Note = ({
     handleColor({ note_id: id_note, note_color: newColor });
   };
 
+  const handlePickColor = (color: string) => {
+    changeColor(color);
+    setColorPickerOpen(false);
+  };
+
   const update = () => {
     handleUpdate(edittedNoteData);
   };
 
   const deleteNote = () => {
-    handleDelete();
+    handleDelete({ note_id: id_note });
   };
 
   const toggleEditMode = () => {
     setEdittedNoteData({ note_title, note_text });
-    setIsInEdition(true);
+    setIsInEdition(!isInEdition);
+  };
+
+  const togglePicker = () => {
+    setColorPickerOpen(!isColorPickerOpen);
   };
 
   return (
-    <span className={`${s.note} ${s[note_color]}`} key={id_note}>
+    <span
+      className={`${s.note} ${s[note_color]}`}
+      key={id_note}
+    >
       {starred ? (
-        <span className={`${s.star} ${s.starred}`} onClick={star}>
-          ★
-        </span>
+        <Image
+          className={`${s.star} ${s.starred}`}
+          onClick={star}
+          src="/star-fill.png"
+          alt="Starred"
+          width={16}
+          height={16}
+        />
       ) : (
-        <span className={`${s.star} ${s.unstarred}`} onClick={star}>
-          ☆
-        </span>
+        <Image
+          src="/star-traced.png"
+          alt="Unstarred"
+          width={16}
+          height={16}
+          className={`${s.star} ${s.unstarred}`}
+          onClick={star}
+        />
       )}
-      <h3 className={s.title}>{note_title}</h3>
-      <p className={s.content}>{note_text}</p>
+      <div onClick={toggleEditMode}>
+        <h3 className={`${s.title} ${isInEdition ? s.editing : ''}`}>
+        {note_title}
+      </h3>
+      <p className={`${s.content} ${isInEdition ? s.editing : ''}`}>
+        {note_text}
+      </p>
+      </div>
+
+      {isInEdition ? (
+        <>
+          <InputComponent
+            value={edittedNoteData.note_text}
+            onChange={(e) =>
+              setEdittedNoteData({
+                ...edittedNoteData,
+                note_title: e.target.value,
+              })
+            }
+            register={register}
+            name="note_title"
+            forName="note_title"
+            type="textarea"
+            transparent
+            text={note_title}
+          />
+          <InputComponent
+            value={edittedNoteData.note_text}
+            onChange={(e) =>
+              setEdittedNoteData({
+                ...edittedNoteData,
+                note_text: e.target.value,
+              })
+            }
+            register={register}
+            name="note_text"
+            forName="note_text"
+            type="textarea"
+            transparent
+            text={note_text}
+          />
+          <span className={s.actions}>
+            <Image
+              src="/color-picker.png"
+              alt="Mudar cor"
+              width={16}
+              height={16}
+              onClick={togglePicker}
+            />
+            {isColorPickerOpen && (
+              <div className={s.color_picker}>
+                <ColorPalette onColorSelect={handlePickColor} />
+              </div>
+            )}
+            <Image
+              src="/delete-icon.png"
+              alt="Deletar"
+              width={16}
+              height={16}
+              onClick={deleteNote}
+            />
+            <p className={s.cancel} onClick={toggleEditMode}>Cancel</p>
+            <span className={s.save}>
+              <Button text='Save' onClick={update} />
+            </span>
+          </span>
+        </>
+      ) : (
+        <></>
+      )}
     </span>
   );
 };

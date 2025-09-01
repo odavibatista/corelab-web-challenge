@@ -7,12 +7,12 @@ import starNote from '../../../api/endpoints/notes/star-note.request';
 import { useModal } from '../../../presentation/hooks/useModal';
 import Note from '../../../presentation/components/Note';
 import browseNotes from '../../../api/endpoints/notes/browse-notes.request';
-import refreshPage from '../../../server/utils/refresh.function';
 import Modal from '../../../presentation/components/Modal';
 import { useRouter } from 'next/navigation';
 import LoadingScreen from '../../../presentation/components/Loading';
 import Image from 'next/image';
 import searchNotes from '../../../api/endpoints/notes/search-notes.request';
+import deleteNote from '../../../api/endpoints/notes/delete-note.request';
 
 export default function DashboardPage() {
   const { modal, setModal, openCloseModal } = useModal();
@@ -77,6 +77,32 @@ export default function DashboardPage() {
     }
   };
 
+  const handleNoteDelete = async (noteId: string) => {
+    const token = sessionStorage.getItem('session');
+    try {
+      const data = await deleteNote(
+        noteId,
+        token,
+      );
+
+      if ('statusCode' in data) {
+        setError(data.message);
+        setModal({ message: data.message, type: 'error' });
+      } else {
+        const notes = await browseNotes(token);
+
+        if ('statusCode' in notes) {
+          setError(notes.message);
+          setModal({ message: notes.message, type: 'error' });
+        } else {
+          setNotes(notes);
+        }
+      }
+    } catch (error: any) {
+      setError(error.message);
+    }
+  };
+
   useEffect(() => {
     (async () => {
       const token = sessionStorage.getItem('session');
@@ -117,6 +143,7 @@ export default function DashboardPage() {
           />
         </span>
       </section>
+      <section className={`${s.create_note}`}></section>
 
       {!areNotesLoading && starredNotes && starredNotes.length > 0 ? (
         <section className={`${s.favorites} ${s.section}`}>
@@ -132,6 +159,7 @@ export default function DashboardPage() {
                 starred={note.starred}
                 user_id={note.user_id}
                 starNote={() => handleNoteStar(note.id_note)}
+                deleteNote={() => handleNoteDelete(note.id_note)}
               />
             ))}
           </div>
@@ -153,6 +181,7 @@ export default function DashboardPage() {
                 starred={note.starred}
                 user_id={note.user_id}
                 starNote={() => handleNoteStar(note.id_note)}
+                deleteNote={() => handleNoteDelete(note.id_note)}
               />
             ))}
           </div>

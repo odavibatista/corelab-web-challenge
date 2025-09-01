@@ -13,6 +13,9 @@ interface InputProps {
   uppercase?: boolean;
   options?: any[];
   value?: string | number;
+  transparent?: boolean
+
+  onChange?: (e: any) => void;
 }
 
 const InputComponent = ({
@@ -26,34 +29,40 @@ const InputComponent = ({
   text,
   errorMessage,
   value,
+  transparent,
+  onChange,
 }: InputProps): JSX.Element => {
   return (
     <span className={s.span}>
-      <label
-        htmlFor={forName}
-        className={`${s.label} ${uppercase === true ? s.uppercase : ''}`}
-      >
-        {text}
-      </label>
       {type === 'textarea' ? (
-        <textarea
-          className={s.input}
+        <input
+          className={transparent ? s.transparent : s.input}
           placeholder={placeholder}
           name={name}
           maxLength={maxLength}
           {...(register && register(name))}
           defaultValue={value}
+          onChange={onChange}
         />
       ) : (
-        <input
-          className={s.input}
-          type={type}
-          placeholder={placeholder}
-          name={name}
-          maxLength={maxLength}
-          {...(register && register(name))}
-          defaultValue={value}
-        />
+        <>
+          <label
+            htmlFor={forName}
+            className={`${s.label} ${uppercase === true ? s.uppercase : ''}`}
+          >
+            {text}
+          </label>
+          <input
+            className={s.input}
+            type={type}
+            placeholder={placeholder}
+            name={name}
+            maxLength={maxLength}
+            {...(register && register(name))}
+            defaultValue={value}
+            onChange={onChange}
+          />
+        </>
       )}
 
       {errorMessage && <p className={s.error_message}>{errorMessage}</p>}
