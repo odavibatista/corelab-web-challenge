@@ -16,8 +16,10 @@ interface HomeDataContext {
 }
 
 interface IHomeDataUser {
-  id: string;
-  name: string;
+  user: {
+    id: string;
+    name: string;
+  }
 }
 
 export const HomeContext = createContext<HomeDataContext>(
@@ -29,19 +31,32 @@ export const HomeProvider = ({ children }: { children: ReactNode }) => {
   const [isHomeDataLoading, setIsHomeDataLoading] = useState<boolean>(true);
   const [token, setToken] = useState<string | null>(null);
 
+  const fetchToken = async () => {
+    const storedToken = sessionStorage.getItem("session");
+    setToken(storedToken);
+
+    return storedToken;
+  };
+
   useLayoutEffect(() => {
     (async () => {
-      setToken(sessionStorage.getItem("session"));
-
       try {
+        const token = await fetchToken().then((storedToken) => {
+          if (storedToken) {
+            return storedToken;
+          }
+          return null;
+        });
+
         if (token) {
           if (!token) return;
           const response = await getHomeData(token);
 
           if ("statusCode" in response) {
+            setIsHomeDataLoading(false);
             return;
           } else {
-            setHomeData(response.user);
+            setHomeData(response);
             setIsHomeDataLoading(false);
             return;
           }

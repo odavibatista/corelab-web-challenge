@@ -16,7 +16,7 @@ export interface ILoginResponse {
 const login = async (
   data: ILoginRequest,
 ): Promise<ILoginResponse | IAPIError> => {
-  const response = await api.post(`/users/login`, data).catch((err) => {
+  const response = await api.post(`/user/login`, data).catch((err) => {
     return err.response;
   });
 

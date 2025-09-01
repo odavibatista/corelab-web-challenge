@@ -1,3 +1,4 @@
+import Button from '../Button';
 import s from './styles.module.scss';
 
 export interface IModalData {
@@ -23,9 +24,7 @@ const Modal = ({ modal, openCloseModal }: ModalProps) => {
       <div className={s.modal}>
         <p className={s.message}>{message}</p>
         <div className={s.button}>
-          <button onClick={handleClick}>
-            {modal.buttonText ? modal.buttonText : 'Ok'}
-          </button>
+          <Button onClick={handleClick} text={type === 'error' ? 'Fechar' : 'Ok'} />
         </div>
       </div>
     </div>

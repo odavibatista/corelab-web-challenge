@@ -12,14 +12,14 @@ export interface IRegisterResponse {
   id: string;
 }
 
-const register = async (
+const userRegister = async (
   data: IRegisterRequest,
 ): Promise<IRegisterResponse | IAPIError> => {
-  const response = await api.post(`/users/register`, data).catch((err) => {
+  const response = await api.post(`/user/register`, data).catch((err) => {
     return err.response;
   });
 
   return response.data;
 };
 
-export default register;
+export default userRegister;

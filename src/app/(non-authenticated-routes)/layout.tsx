@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { useLayoutEffect } from "react";
 import { useHome } from "../../providers/home-data-provider";
+import LoadingScreen from "../../presentation/components/Loading";
 
 export default function RootLayout({
   children,
@@ -18,6 +19,10 @@ export default function RootLayout({
       }
     })();
   }, [homeData]);
+
+  if (isHomeDataLoading) {
+    return <LoadingScreen />;
+  }
 
   return <>{children}</>;
 }

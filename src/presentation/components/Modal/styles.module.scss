@@ -1,4 +1,4 @@
-@import '@app/globals.scss';
+@import '../../../app/globals.scss';
 
 .modal_open {
   background-color: rgba(0, 0, 0, 0.5);
@@ -35,7 +35,7 @@
 }
 
 .message {
-  color: $white-gray;
+  color: $d;
   margin-top: 20px;
 }
 

@@ -1,25 +1,29 @@
 "use client";
 
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useLayoutEffect } from "react";
-import { useHome } from "../../providers/home-data-provider";
 import Header from "../../presentation/components/Header";
 import Footer from "../../presentation/components/Footer";
+import { useHome } from "../../providers/home-data-provider";
+import LoadingScreen from "../../presentation/components/Loading";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { homeData } = useHome();
+  const { homeData, isHomeDataLoading } = useHome();
+  const router = useRouter();
 
   useLayoutEffect(() => {
-    (async () => {
-      if (!homeData) {
-        redirect("/login");
-      }
-    })();
+    if (!homeData && !isHomeDataLoading) {
+      router.push("/login");
+    }
   }, [homeData]);
+
+  if (isHomeDataLoading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>

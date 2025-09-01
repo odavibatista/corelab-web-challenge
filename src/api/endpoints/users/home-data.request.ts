@@ -8,7 +8,7 @@ export interface IHomeDataResponse {
 }
 
 const getHomeData = async (token: string): Promise<IHomeDataResponse | IAPIError> => {
-  const response = await api.get(`/users/home-data`, {
+  const response = await api.get(`/user/home-data`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

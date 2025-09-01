@@ -1,11 +1,12 @@
 'use client'
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import s from './styles.module.scss';
 import { IFindNoteByIdResponse } from '../../../api/endpoints/notes/find-note-by-id.request';
 import starNote from '../../../api/endpoints/notes/star-note.request';
 import { useModal } from '../../../presentation/hooks/useModal';
 import Note from '../../../presentation/components/Note';
+import browseNotes from '../../../api/endpoints/notes/browse-notes.request';
 
 export default function DashboardPage() {
   let token: string = '';
@@ -13,6 +14,7 @@ export default function DashboardPage() {
   const { modal, setModal, openCloseModal } = useModal();
 
   const [notes, setNotes] = useState<IFindNoteByIdResponse[]>([]);
+  const [areNotesLoading, setNotesLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
   const starredNotes = useMemo(() => {
@@ -46,6 +48,24 @@ export default function DashboardPage() {
       setModal({ message: errorMessage, type: 'error' });
     }
   };
+
+    useEffect(() => {
+    (async () => {
+      const token = sessionStorage.getItem("session");
+      if (!token) return;
+      const data = await browseNotes(token);
+
+      if ("statusCode" in data) {
+        setErrorMessage(data.message);
+      } else {
+        setNotes(data);
+
+        console.log("Notes:", data);
+
+        setNotesLoading(false);
+      }
+    })();
+  }, [areNotesLoading]);
 
   return (
     <main className={s.dashboard}>

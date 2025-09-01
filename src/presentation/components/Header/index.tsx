@@ -2,7 +2,6 @@
 
 import s from "./styles.module.scss";
 import React, { useEffect, useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { redirect } from "next/navigation";
 import { useHome } from "../../../providers/home-data-provider";
 import refreshPage from "../../../server/utils/refresh.function";
@@ -26,7 +25,7 @@ export default function Header() {
     setUserName(null);
     sessionStorage.clear();
     await refreshPage();
-    redirect("/sign-in");
+    redirect("/login");
   };
 
   return (
