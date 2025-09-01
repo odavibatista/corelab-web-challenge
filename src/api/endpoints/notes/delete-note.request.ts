@@ -14,7 +14,7 @@ const deleteNote = async (
       return err.response;
     });
 
-  return response.data;
+  return response;
 };
 
 export default deleteNote;

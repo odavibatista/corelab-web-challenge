@@ -19,7 +19,7 @@ const changeNoteColor = async (
       return err.response;
     });
 
-  return response.data;
+  return response;
 };
 
 export default changeNoteColor;

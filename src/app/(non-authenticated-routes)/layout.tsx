@@ -1,9 +1,8 @@
-"use client";
+'use client';
 
-import { redirect } from "next/navigation";
-import { useLayoutEffect } from "react";
-import { useHome } from "../../providers/home-data-provider";
-import LoadingScreen from "../../presentation/components/Loading";
+import { redirect } from 'next/navigation';
+import { useLayoutEffect } from 'react';
+import { useHome } from '../../providers/home-data-provider';
 
 export default function RootLayout({
   children,
@@ -13,16 +12,10 @@ export default function RootLayout({
   const { homeData, isHomeDataLoading } = useHome();
 
   useLayoutEffect(() => {
-    (async () => {
-      if (homeData && !isHomeDataLoading) {
-        redirect("/dashboard");
-      }
-    })();
+    if (homeData && !isHomeDataLoading) {
+      redirect('/dashboard');
+    }
   }, [homeData]);
-
-  if (isHomeDataLoading) {
-    return <LoadingScreen />;
-  }
 
   return <>{children}</>;
 }

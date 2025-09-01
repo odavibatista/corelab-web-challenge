@@ -1,5 +1,5 @@
-import { JSX } from "react";
-import s from "./styles.module.scss";
+import { JSX } from 'react';
+import s from './styles.module.scss';
 
 const LoadingScreen = (): JSX.Element => {
   return (
@@ -8,7 +8,7 @@ const LoadingScreen = (): JSX.Element => {
         <div>
           <div className={s.spinner} />
         </div>
-    </div>
+      </div>
     </section>
   );
 };

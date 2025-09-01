@@ -1,5 +1,4 @@
-"use client";
-
+'use client';
 
 import {
   ReactNode,
@@ -7,8 +6,8 @@ import {
   useContext,
   useLayoutEffect,
   useState,
-} from "react";
-import getHomeData from "../api/endpoints/users/home-data.request";
+} from 'react';
+import getHomeData from '../api/endpoints/users/home-data.request';
 
 interface HomeDataContext {
   homeData: IHomeDataUser | null;
@@ -19,7 +18,7 @@ interface IHomeDataUser {
   user: {
     id: string;
     name: string;
-  }
+  };
 }
 
 export const HomeContext = createContext<HomeDataContext>(
@@ -31,35 +30,29 @@ export const HomeProvider = ({ children }: { children: ReactNode }) => {
   const [isHomeDataLoading, setIsHomeDataLoading] = useState<boolean>(true);
   const [token, setToken] = useState<string | null>(null);
 
-  const fetchToken = async () => {
-    const storedToken = sessionStorage.getItem("session");
-    setToken(storedToken);
-
-    return storedToken;
-  };
-
   useLayoutEffect(() => {
     (async () => {
       try {
-        const token = await fetchToken().then((storedToken) => {
-          if (storedToken) {
-            return storedToken;
-          }
-          return null;
-        });
+        const storedToken = sessionStorage.getItem('session');
+        setToken(storedToken);
 
-        if (token) {
-          if (!token) return;
-          const response = await getHomeData(token);
+        console.log(token);
 
-          if ("statusCode" in response) {
-            setIsHomeDataLoading(false);
-            return;
-          } else {
-            setHomeData(response);
-            setIsHomeDataLoading(false);
-            return;
-          }
+        if (!token) {
+          setHomeData(null);
+          setIsHomeDataLoading(false);
+          return;
+        }
+
+        const response = await getHomeData(token);
+
+        if ('statusCode' in response) {
+          setIsHomeDataLoading(false);
+          return;
+        } else {
+          setHomeData(response);
+          setIsHomeDataLoading(false);
+          return;
         }
       } catch (error) {
         console.log(error);
@@ -84,7 +77,7 @@ export const useHome = () => {
 
   if (Object.keys(context).length <= 0) {
     throw new Error(
-      "O hook useHome só pode ser usado em componentes abaixo do HomeProvider.",
+      'O hook useHome só pode ser usado em componentes abaixo do HomeProvider.',
     );
   }
 

@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import { useLayoutEffect } from "react";
-import Header from "../../presentation/components/Header";
-import Footer from "../../presentation/components/Footer";
-import { useHome } from "../../providers/home-data-provider";
-import LoadingScreen from "../../presentation/components/Loading";
+import { redirect, useRouter } from 'next/navigation';
+import { useLayoutEffect } from 'react';
+import Header from '../../presentation/components/Header';
+import Footer from '../../presentation/components/Footer';
+import { useHome } from '../../providers/home-data-provider';
+import LoadingScreen from '../../presentation/components/Loading';
 
 export default function RootLayout({
   children,
@@ -17,13 +17,9 @@ export default function RootLayout({
 
   useLayoutEffect(() => {
     if (!homeData && !isHomeDataLoading) {
-      router.push("/login");
+      redirect('/login');
     }
   }, [homeData]);
-
-  if (isHomeDataLoading) {
-    return <LoadingScreen />;
-  }
 
   return (
     <>

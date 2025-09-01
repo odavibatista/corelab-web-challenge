@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useEffect, useMemo, useState } from 'react';
 import s from './styles.module.scss';
@@ -7,11 +7,15 @@ import starNote from '../../../api/endpoints/notes/star-note.request';
 import { useModal } from '../../../presentation/hooks/useModal';
 import Note from '../../../presentation/components/Note';
 import browseNotes from '../../../api/endpoints/notes/browse-notes.request';
+import refreshPage from '../../../server/utils/refresh.function';
+import Modal from '../../../presentation/components/Modal';
+import { useRouter } from 'next/navigation';
+import LoadingScreen from '../../../presentation/components/Loading';
 
 export default function DashboardPage() {
-  let token: string = '';
-
   const { modal, setModal, openCloseModal } = useModal();
+
+  const router = useRouter();
 
   const [notes, setNotes] = useState<IFindNoteByIdResponse[]>([]);
   const [areNotesLoading, setNotesLoading] = useState(true);
@@ -30,6 +34,7 @@ export default function DashboardPage() {
   }
 
   const handleNoteStar = async (noteId: string) => {
+    const token = sessionStorage.getItem('session');
     try {
       const data = await starNote(
         {
@@ -42,30 +47,34 @@ export default function DashboardPage() {
         setError(data.message);
         setModal({ message: data.message, type: 'error' });
       } else {
+        setModal({
+          message: 'Nota alterada com sucesso!',
+          type: 'success',
+        });
       }
     } catch (error: any) {
       setError(error.message);
-      setModal({ message: errorMessage, type: 'error' });
     }
   };
 
-    useEffect(() => {
+  useEffect(() => {
     (async () => {
-      const token = sessionStorage.getItem("session");
-      if (!token) return;
+      const token = sessionStorage.getItem('session');
       const data = await browseNotes(token);
 
-      if ("statusCode" in data) {
+      if ('statusCode' in data) {
         setErrorMessage(data.message);
       } else {
         setNotes(data);
-
-        console.log("Notes:", data);
 
         setNotesLoading(false);
       }
     })();
   }, [areNotesLoading]);
+
+  if (areNotesLoading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <main className={s.dashboard}>
@@ -82,19 +91,52 @@ export default function DashboardPage() {
       <section className={`${s.favorites} ${s.section}`}>
         <h4 className={s.section_title}>Favorites</h4>
         <div className={s.cards}>
-          {starredNotes.map((note) => (
-            <Note key={note.id_note} note_title={note.note_title} id_note={note.id_note} note_color={note.note_color} note_text={note.note_text} starred={note.starred} user_id={note.user_id} handleStar={() => handleNoteStar(note.id_note)}   />
-          ))}
+          {!areNotesLoading && starredNotes && starredNotes.length > 0 ? (
+            starredNotes.map((note) => (
+              <Note
+                key={note.id_note}
+                note_title={note.note_title}
+                id_note={note.id_note}
+                note_color={note.note_color}
+                note_text={note.note_text}
+                starred={note.starred}
+                user_id={note.user_id}
+                starNote={() => handleNoteStar(note.id_note)}
+              />
+            ))
+          ) : (
+            <p>No notes found</p>
+          )}
         </div>
       </section>
       <section className={`${s.others} ${s.section}`}>
         <h4 className={s.section_title}>Others</h4>
         <div className={s.cards}>
-          {otherNotes.map((note) => (
-            <Note key={note.id_note} note_title={note.note_title} id_note={note.id_note} note_color={note.note_color} note_text={note.note_text} starred={note.starred} user_id={note.user_id} handleStar={() => handleNoteStar(note.id_note)}   />
-          ))}
+          {!areNotesLoading && otherNotes && otherNotes.length > 0 ? (
+            otherNotes.map((note) => (
+              <Note
+                key={note.id_note}
+                note_title={note.note_title}
+                id_note={note.id_note}
+                note_color={note.note_color}
+                note_text={note.note_text}
+                starred={note.starred}
+                user_id={note.user_id}
+                starNote={() => handleNoteStar(note.id_note)}
+              />
+            ))
+          ) : (
+            <p>No notes found</p>
+          )}
         </div>
       </section>
+      {modal?.message !== '' && (
+        <Modal
+          modal={modal}
+          openCloseModal={openCloseModal}
+          key={modal.message}
+        />
+      )}
     </main>
   );
 }

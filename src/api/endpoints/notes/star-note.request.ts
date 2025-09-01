@@ -18,7 +18,7 @@ const starNote = async (
       return err.response;
     });
 
-  return response.data;
+  return response;
 };
 
 export default starNote;

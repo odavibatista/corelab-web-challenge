@@ -1,9 +1,9 @@
-import { JSX } from "react";
-import s from "./styles.module.scss";
+import { JSX } from 'react';
+import s from './styles.module.scss';
 
 interface ButtonProps {
   text: string;
-  type?: "submit" | "button";
+  type?: 'submit' | 'button';
   className?: string;
   onClick?: () => void;
 }

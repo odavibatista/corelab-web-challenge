@@ -19,4 +19,37 @@
 .note {
   border-radius: 8px;
   border: 1px solid $gr;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  font-family: sans-serif;
+  gap: 8px;
+  height: 120px;
+  padding: 12px;
+  width: 240px;
+}
+
+.star {
+  border-radius: 50%;
+  font-size: 24px;
+  position: fixed;
+  margin-left: 200px;
+  margin-top: -10px;
+  text-align: center;
+  transition: 0.2s;
+  cursor: default;
+}
+
+.starred {
+  color: gold;
+}
+
+.title {
+  color: $d;
+  font-size: 16px;
+  font-weight: normal;
+}
+
+.content {
+  color: $gr;
 }

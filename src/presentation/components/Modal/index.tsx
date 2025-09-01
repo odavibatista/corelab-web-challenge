@@ -24,7 +24,10 @@ const Modal = ({ modal, openCloseModal }: ModalProps) => {
       <div className={s.modal}>
         <p className={s.message}>{message}</p>
         <div className={s.button}>
-          <Button onClick={handleClick} text={type === 'error' ? 'Fechar' : 'Ok'} />
+          <Button
+            onClick={handleClick}
+            text={type === 'error' ? 'Fechar' : 'Ok'}
+          />
         </div>
       </div>
     </div>

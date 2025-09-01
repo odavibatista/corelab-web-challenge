@@ -1,27 +1,27 @@
-"use client";
+'use client';
 
-import { redirect, useRouter } from "next/navigation";
-import s from "./styles.module.scss";
-import { z } from "zod";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useModal } from "../../../presentation/hooks/useModal";
-import InputComponent from "../../../presentation/components/Input";
-import Modal from "../../../presentation/components/Modal";
-import { zodResolver } from "@hookform/resolvers/zod";
-import login from "../../../api/endpoints/users/login.request";
-import Button from "../../../presentation/components/Button";
-import Link from "next/link";
+import { redirect, useRouter } from 'next/navigation';
+import s from './styles.module.scss';
+import { z } from 'zod';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useModal } from '../../../presentation/hooks/useModal';
+import InputComponent from '../../../presentation/components/Input';
+import Modal from '../../../presentation/components/Modal';
+import { zodResolver } from '@hookform/resolvers/zod';
+import login from '../../../api/endpoints/users/login.request';
+import Button from '../../../presentation/components/Button';
+import Link from 'next/link';
 
 const loginSchema = z.object({
-  email: z.string().min(14, { message: "Campo obrigatório." }),
-  password: z.string().min(8, { message: "Campo obrigatório." }),
+  email: z.string().min(14, { message: 'Campo obrigatório.' }),
+  password: z.string().min(8, { message: 'Campo obrigatório.' }),
 });
 
 type LoginSchemaInterface = z.infer<typeof loginSchema>;
 
 export default function LoginScreen() {
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
   const [loginData, setLoginData] = useState<LoginSchemaInterface>();
 
   const {
@@ -31,7 +31,7 @@ export default function LoginScreen() {
     getValues,
   } = useForm<LoginSchemaInterface>({
     resolver: zodResolver(loginSchema),
-    mode: "all",
+    mode: 'all',
   });
 
   const router = useRouter();
@@ -55,20 +55,20 @@ export default function LoginScreen() {
             password: loginData.password,
           });
 
-          if ("statusCode" in loginReq) {
+          if ('statusCode' in loginReq) {
             setError(loginReq.message);
-            setModal({ message: errorMessage, type: "error" });
+            setModal({ message: errorMessage, type: 'error' });
             setLoginData(undefined);
             return;
           } else {
-            sessionStorage.setItem("session", loginReq.token);
-            router.push("/dashboard");
+            sessionStorage.setItem('session', loginReq.token);
+            redirect('/dashboard');
           }
         } catch (error: any) {
-          setError("Ocorreu um erro inesperado. Tente novamente mais tarde.");
-          setModal({ message: errorMessage, type: "error" });
-            setLoginData(undefined);
-            return;
+          setError('Ocorreu um erro inesperado. Tente novamente mais tarde.');
+          setModal({ message: errorMessage, type: 'error' });
+          setLoginData(undefined);
+          return;
         }
       }
     })();
@@ -107,12 +107,13 @@ export default function LoginScreen() {
           <Button text="ENTRAR" type="submit" />
         </div>
 
-        {modal?.message !== "" && (
+        {modal?.message !== '' && (
           <Modal modal={modal} openCloseModal={openCloseModal} />
         )}
       </form>
       <h2 className={s.h2}>
-        Não é cadastrado? <Link href="/register">Clique aqui</Link> para se cadastrar.
+        Não é cadastrado? <Link href="/register">Clique aqui</Link> para se
+        cadastrar.
       </h2>
     </section>
   );

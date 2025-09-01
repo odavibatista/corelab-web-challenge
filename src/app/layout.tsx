@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.scss';
-import "./styles.scss";
+import './styles.scss';
 import { HomeProvider } from '../providers/home-data-provider';
 export const metadata: Metadata = {
   title: 'CoreNotes - Suas Anotações em um só lugar',
@@ -22,9 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={``}>
-        <HomeProvider>
-          {children}
-        </HomeProvider>
+        <HomeProvider>{children}</HomeProvider>
       </body>
     </html>
   );

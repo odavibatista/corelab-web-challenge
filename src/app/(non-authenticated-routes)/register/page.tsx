@@ -1,29 +1,29 @@
-"use client";
+'use client';
 
-import { redirect, useRouter } from "next/navigation";
-import s from "./styles.module.scss";
-import { z } from "zod";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useModal } from "../../../presentation/hooks/useModal";
-import InputComponent from "../../../presentation/components/Input";
-import Modal from "../../../presentation/components/Modal";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Button from "../../../presentation/components/Button";
-import Link from "next/link";
-import userRegister from "../../../api/endpoints/users/register.request";
+import { redirect, useRouter } from 'next/navigation';
+import s from './styles.module.scss';
+import { z } from 'zod';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useModal } from '../../../presentation/hooks/useModal';
+import InputComponent from '../../../presentation/components/Input';
+import Modal from '../../../presentation/components/Modal';
+import { zodResolver } from '@hookform/resolvers/zod';
+import Button from '../../../presentation/components/Button';
+import Link from 'next/link';
+import userRegister from '../../../api/endpoints/users/register.request';
 
 const registerSchema = z.object({
-  name: z.string().min(2, { message: "Campo obrigatório." }),
-  email: z.string().min(14, { message: "Campo obrigatório." }),
-  password: z.string().min(8, { message: "Campo obrigatório." }),
-  password_confirmation: z.string().min(8, { message: "Campo obrigatório." }),
+  name: z.string().min(2, { message: 'Campo obrigatório.' }),
+  email: z.string().min(14, { message: 'Campo obrigatório.' }),
+  password: z.string().min(8, { message: 'Campo obrigatório.' }),
+  password_confirmation: z.string().min(8, { message: 'Campo obrigatório.' }),
 });
 
 type RegisterSchemaInterface = z.infer<typeof registerSchema>;
 
 export default function RegisterScreen() {
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
   const [registerData, setRegisterData] = useState<RegisterSchemaInterface>();
 
   const {
@@ -33,7 +33,7 @@ export default function RegisterScreen() {
     getValues,
   } = useForm<RegisterSchemaInterface>({
     resolver: zodResolver(registerSchema),
-    mode: "all",
+    mode: 'all',
   });
 
   const router = useRouter();
@@ -59,18 +59,18 @@ export default function RegisterScreen() {
             password_confirmation: registerData.password_confirmation,
           });
 
-          if ("statusCode" in registerReq) {
+          if ('statusCode' in registerReq) {
             setError(registerReq.message);
-            setModal({ message: errorMessage, type: "error" });
+            setModal({ message: errorMessage, type: 'error' });
             setRegisterData(undefined);
             return;
           } else {
-            sessionStorage.setItem("session", registerReq.token);
-            redirect("/dashboard");
+            sessionStorage.setItem('session', registerReq.token);
+            redirect('/dashboard');
           }
         } catch (error: any) {
-          setError("Ocorreu um erro inesperado. Tente novamente mais tarde.");
-          setModal({ message: errorMessage, type: "error" });
+          setError('Ocorreu um erro inesperado. Tente novamente mais tarde.');
+          setModal({ message: errorMessage, type: 'error' });
           setRegisterData(undefined);
         }
       }
@@ -80,7 +80,9 @@ export default function RegisterScreen() {
   return (
     <section className={s.register_screen}>
       <h1 className={s.h1}>Bem-vindo ao CoreNotes!</h1>
-      <h2 className={s.h2}>Insira seus credenciais abaixo para se cadastrar na nossa plataforma:</h2>
+      <h2 className={s.h2}>
+        Insira seus credenciais abaixo para se cadastrar na nossa plataforma:
+      </h2>
       <form onSubmit={handleSubmit(onSubmit)} className={s.login_area}>
         <div className={s.text_field}>
           <InputComponent
@@ -134,7 +136,7 @@ export default function RegisterScreen() {
           <Button text="REGISTRAR" type="submit" />
         </div>
 
-        {modal?.message !== "" && (
+        {modal?.message !== '' && (
           <Modal modal={modal} openCloseModal={openCloseModal} />
         )}
       </form>
