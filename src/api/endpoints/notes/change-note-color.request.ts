@@ -2,7 +2,7 @@ import api, { IAPIError } from '../../api';
 
 interface ChangeNoteColorAttributes {
   note_id: string;
-  color: 'red' | 'yellow' | 'blue' | 'green';
+  note_color: 'red' | 'yellow' | 'blue' | 'green';
 }
 
 const changeNoteColor = async (
@@ -10,7 +10,7 @@ const changeNoteColor = async (
   token: string,
 ): Promise<{} | IAPIError> => {
   const response = await api
-    .post(`/notes/change-color`, {
+    .post(`/notes/change-color`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

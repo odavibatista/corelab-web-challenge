@@ -1,4 +1,4 @@
-import { JSX } from 'react';
+import React, { JSX } from 'react';
 import s from './styles.module.scss';
 
 interface InputProps {
@@ -13,7 +13,8 @@ interface InputProps {
   uppercase?: boolean;
   options?: any[];
   value?: string | number;
-  transparent?: boolean
+  transparent?: boolean;
+  style?: React.CSSProperties;
 
   onChange?: (e: any) => void;
 }
@@ -30,12 +31,13 @@ const InputComponent = ({
   errorMessage,
   value,
   transparent,
+  style,
   onChange,
 }: InputProps): JSX.Element => {
   return (
     <span className={s.span}>
       {type === 'textarea' ? (
-        <input
+        <textarea
           className={transparent ? s.transparent : s.input}
           placeholder={placeholder}
           name={name}
@@ -43,6 +45,7 @@ const InputComponent = ({
           {...(register && register(name))}
           defaultValue={value}
           onChange={onChange}
+          style={style}
         />
       ) : (
         <>

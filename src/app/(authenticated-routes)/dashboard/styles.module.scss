@@ -77,3 +77,9 @@
   flex-direction: row;
   gap: 15px;
 }
+
+@media (max-width: 768px) {
+  .cards {
+    flex-direction: column;
+  }
+}

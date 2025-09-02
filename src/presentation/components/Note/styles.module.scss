@@ -24,7 +24,7 @@
   flex-direction: column;
   font-family: sans-serif;
   gap: 8px;
-  height: 120px;
+  min-height: 140px;
   padding: 12px;
   width: 240px;
 }
@@ -45,6 +45,9 @@
   display: flex;
   flex-direction: row;
   gap: 8px;
+  justify-self: end;
+  margin-top: 30px;
+  width: 100%;
 }
 
 .editing {
@@ -52,7 +55,14 @@
 }
 
 .cancel {
+  border-radius: 10px;
   font-size: 12px;
+  padding: 8px 12px;
+  transition: 0.2s;
+
+  &:hover {
+    background-color: $lgr;
+  }
 }
 
 .save {
@@ -64,6 +74,21 @@
   font-weight: 600;
   height: 30px;
   width: 60px;
+}
+
+.note_body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  width: 100%;
+}
+
+.edit_mode {
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  justify-content: space-between;
 }
 
 .starred {
@@ -78,4 +103,10 @@
 
 .content {
   color: $gr;
+}
+
+@media (max-width: 768px) {
+  .note {
+    width: 100%;
+  }
 }

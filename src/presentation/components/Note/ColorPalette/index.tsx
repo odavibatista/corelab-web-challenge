@@ -8,12 +8,11 @@ const ColorPalette = ({ onColorSelect }: IColorPaletteProps) => {
   const COLORS = ['red', 'yellow', 'blue', 'green'];
 
   return (
-    <div className={s.palette}>
+    <div className={s.color_picker}>
       {COLORS.map((color) => (
         <button
           key={color}
-          className={s.swatch}
-          style={{ backgroundColor: color }}
+          className={`${s.color} ${s[color]}`}
           onClick={() => onColorSelect(color)}
         />
       ))}

@@ -13,6 +13,8 @@ import LoadingScreen from '../../../presentation/components/Loading';
 import Image from 'next/image';
 import searchNotes from '../../../api/endpoints/notes/search-notes.request';
 import deleteNote from '../../../api/endpoints/notes/delete-note.request';
+import editNote from '../../../api/endpoints/notes/edit-note.request';
+import changeNoteColor from '../../../api/endpoints/notes/change-note-color.request';
 
 export default function DashboardPage() {
   const { modal, setModal, openCloseModal } = useModal();
@@ -77,13 +79,66 @@ export default function DashboardPage() {
     }
   };
 
+  const handleChangeColor = async (
+    noteId: string,
+    color: 'red' | 'yellow' | 'blue' | 'green',
+  ) => {
+    const token = sessionStorage.getItem('session');
+    try {
+      const data = await changeNoteColor(
+        {
+          note_id: noteId,
+          note_color: color,
+        },
+        token,
+      );
+      if ('statusCode' in data) {
+        setError(data.message);
+        setModal({ message: data.message, type: 'error' });
+      } else {
+        const notes = await browseNotes(token);
+        if ('statusCode' in notes) {
+          setError(notes.message);
+          setModal({ message: notes.message, type: 'error' });
+        } else {
+          setNotes(notes);
+        }
+      }
+    } catch (error: any) {
+      setError(error.message);
+    }
+  };
+
+  const handleEditNote = async (
+    noteId: string,
+    noteData: { note_title: string; note_text: string },
+  ) => {
+    const token = sessionStorage.getItem('session');
+
+    try {
+      const data = await editNote(noteId, noteData, token);
+      if ('statusCode' in data) {
+        setError(data.message);
+        setModal({ message: data.message, type: 'error' });
+      } else {
+        const notes = await browseNotes(token);
+
+        if ('statusCode' in notes) {
+          setError(notes.message);
+          setModal({ message: notes.message, type: 'error' });
+        } else {
+          setNotes(notes);
+        }
+      }
+    } catch (error: any) {
+      setError(error.message);
+    }
+  };
+
   const handleNoteDelete = async (noteId: string) => {
     const token = sessionStorage.getItem('session');
     try {
-      const data = await deleteNote(
-        noteId,
-        token,
-      );
+      const data = await deleteNote(noteId, token);
 
       if ('statusCode' in data) {
         setError(data.message);
@@ -157,8 +212,16 @@ export default function DashboardPage() {
                 note_color={note.note_color}
                 note_text={note.note_text}
                 starred={note.starred}
-                user_id={note.user_id}
                 starNote={() => handleNoteStar(note.id_note)}
+                changeColor={(data) =>
+                  handleChangeColor(note.id_note, data.note_color)
+                }
+                updateNote={(data) =>
+                  handleEditNote(note.id_note, {
+                    note_title: data.note_title,
+                    note_text: data.note_text,
+                  })
+                }
                 deleteNote={() => handleNoteDelete(note.id_note)}
               />
             ))}
@@ -179,8 +242,16 @@ export default function DashboardPage() {
                 note_color={note.note_color}
                 note_text={note.note_text}
                 starred={note.starred}
-                user_id={note.user_id}
                 starNote={() => handleNoteStar(note.id_note)}
+                changeColor={(data) =>
+                  handleChangeColor(note.id_note, data.note_color)
+                }
+                updateNote={(data) =>
+                  handleEditNote(note.id_note, {
+                    note_title: data.note_title,
+                    note_text: data.note_text,
+                  })
+                }
                 deleteNote={() => handleNoteDelete(note.id_note)}
               />
             ))}
