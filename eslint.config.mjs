@@ -10,10 +10,16 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  ...compat.extends(
+    'next/core-web-vitals',
+    'next/typescript',
+    'plugin:react-hook-form/recommended',
+  ),
   ...compat.config({
+    plugins: ['react-hook-form'],
     rules: {
-      
+      'react-hook-form/destructuring-formstate': 'error',
+      '@typescript-eslint/no-explicit-any': 'warn',
     },
   }),
   {

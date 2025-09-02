@@ -63,8 +63,8 @@ export default function RegisterScreen() {
             refreshPage();
             redirect('/dashboard');
           }
-      } catch (error: unknown) {
-        setError((error as Error).message);
+        } catch (error: unknown) {
+          setError((error as Error).message);
           setModal({ message: errorMessage, type: 'error' });
           setRegisterData(undefined);
         }
