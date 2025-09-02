@@ -38,7 +38,7 @@ const InputComponent = ({
     <span className={s.span}>
       {type === 'textarea' ? (
         <textarea
-          className={transparent ? s.transparent : s.input}
+          className={transparent ? s.transparent : s.input + ' ' + s.textarea}
           placeholder={placeholder}
           name={name}
           maxLength={maxLength}
@@ -51,12 +51,12 @@ const InputComponent = ({
         <>
           <label
             htmlFor={forName}
-            className={`${s.label} ${uppercase === true ? s.uppercase : ''}`}
+            className={`${s.label} ${s.textarea} ${uppercase === true ? s.uppercase : ''}`}
           >
             {text}
           </label>
           <input
-            className={s.input}
+            className={s.input + ' ' + s.textarea}
             type={type}
             placeholder={placeholder}
             name={name}

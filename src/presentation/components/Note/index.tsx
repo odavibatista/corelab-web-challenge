@@ -117,7 +117,7 @@ const Note = ({
       {isInEdition ? (
         <div className={s.edit_mode}>
           <InputComponent
-            value={edittedNoteData.note_text}
+            value={edittedNoteData.note_title}
             onChange={(e) => {
               setEdittedNoteData({
                 ...edittedNoteData,
@@ -130,7 +130,11 @@ const Note = ({
             type="textarea"
             transparent
             text={note_title}
-            style={{ fontSize: '16px' }}
+            style={{
+              fontSize: '16px',
+              fontFamily: 'sans-serif',
+              resize: 'none',
+            }}
           />
           <InputComponent
             value={edittedNoteData.note_text}
@@ -146,7 +150,11 @@ const Note = ({
             type="textarea"
             transparent
             text={note_text}
-            style={{ fontSize: '16px' }}
+            style={{
+              fontSize: '16px',
+              fontFamily: 'sans-serif',
+              resize: 'none',
+            }}
           />
           <span className={s.actions}>
             <Image

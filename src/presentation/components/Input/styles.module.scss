@@ -29,9 +29,17 @@
   width: inherit;
 }
 
+.textarea {
+  border: 2px solid transparent;
+
+  &:focus {
+    border: 2px solid $gr;
+  }
+}
+
 .transparent {
   background-color: transparent;
-  border: none;
+  border: 2px solid transparent;
   border-radius: 0;
   box-shadow: none;
   padding: 5px 0;

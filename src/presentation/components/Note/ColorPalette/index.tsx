@@ -1,11 +1,16 @@
 import s from './styles.module.scss';
 
 export interface IColorPaletteProps {
-  onColorSelect: (color: string) => void;
+  onColorSelect: (color: 'red' | 'yellow' | 'blue' | 'green') => void;
 }
 
 const ColorPalette = ({ onColorSelect }: IColorPaletteProps) => {
-  const COLORS = ['red', 'yellow', 'blue', 'green'];
+  const COLORS: Array<'red' | 'yellow' | 'blue' | 'green'> = [
+    'red',
+    'yellow',
+    'blue',
+    'green',
+  ];
 
   return (
     <div className={s.color_picker}>

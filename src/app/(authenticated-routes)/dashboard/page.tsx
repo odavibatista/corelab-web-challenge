@@ -8,18 +8,16 @@ import { useModal } from '../../../presentation/hooks/useModal';
 import Note from '../../../presentation/components/Note';
 import browseNotes from '../../../api/endpoints/notes/browse-notes.request';
 import Modal from '../../../presentation/components/Modal';
-import { useRouter } from 'next/navigation';
 import LoadingScreen from '../../../presentation/components/Loading';
 import Image from 'next/image';
 import searchNotes from '../../../api/endpoints/notes/search-notes.request';
 import deleteNote from '../../../api/endpoints/notes/delete-note.request';
 import editNote from '../../../api/endpoints/notes/edit-note.request';
 import changeNoteColor from '../../../api/endpoints/notes/change-note-color.request';
+import NoteCreator from '../../../presentation/components/NoteCreator';
 
 export default function DashboardPage() {
   const { modal, setModal, openCloseModal } = useModal();
-
-  const router = useRouter();
 
   const [notes, setNotes] = useState<IFindNoteByIdResponse[]>([]);
   const [areNotesLoading, setNotesLoading] = useState(true);
@@ -99,7 +97,7 @@ export default function DashboardPage() {
         const notes = await browseNotes(token);
         if ('statusCode' in notes) {
           setError(notes.message);
-          setModal({ message: notes.message, type: 'error' });
+          setModal({ message: errorMessage, type: 'error' });
         } else {
           setNotes(notes);
         }
@@ -119,7 +117,9 @@ export default function DashboardPage() {
       const data = await editNote(noteId, noteData, token);
       if ('statusCode' in data) {
         setError(data.message);
-        setModal({ message: data.message, type: 'error' });
+        if (errorMessage.includes('Validation failed'))
+          setError('Favor, inserir dados válidos para editar a nota.');
+        setModal({ message: errorMessage, type: 'error' });
       } else {
         const notes = await browseNotes(token);
 
@@ -198,7 +198,9 @@ export default function DashboardPage() {
           />
         </span>
       </section>
-      <section className={`${s.create_note}`}></section>
+      <section className={`${s.create_note}`}>
+        <NoteCreator onNoteCreated={() => handleSearchNotes('')} />
+      </section>
 
       {!areNotesLoading && starredNotes && starredNotes.length > 0 ? (
         <section className={`${s.favorites} ${s.section}`}>
