@@ -15,7 +15,7 @@ export default function RootLayout({
     if (homeData && !isHomeDataLoading) {
       redirect('/dashboard');
     }
-  }, [homeData]);
+  }, [homeData, isHomeDataLoading]);
 
   return <>{children}</>;
 }

@@ -14,10 +14,10 @@
 }
 
 .star {
+  align-self: flex-end;
   border-radius: 50%;
   font-size: 24px;
   position: absolute;
-  margin-left: 200px;
   text-align: center;
   transition: 0.2s;
   cursor: default;
@@ -40,6 +40,7 @@
 
 .cancel {
   border-radius: 10px;
+  cursor: pointer;
   font-size: 12px;
   padding: 8px 12px;
   transition: 0.2s;
@@ -92,5 +93,9 @@
 @media (max-width: 768px) {
   .note {
     width: 100%;
+  }
+
+  .star {
+    align-self: flex-end;
   }
 }

@@ -64,11 +64,12 @@ const NoteCreator = ({ onNoteCreated }: ICreateNoteProps) => {
           setModal({ message: errorMessage, type: 'error' });
         } else {
           setToggled(false);
+          setNoteData(null);
           setModal({ message: 'Nota criada com sucesso!', type: 'success' });
           onNoteCreated();
         }
-      } catch (error: any) {
-        setError(error.message);
+      } catch (error: unknown) {
+        setError((error as Error).message);
       }
     } else {
       setError('Por favor, preencha todos os campos para criar uma nota.');
@@ -83,7 +84,7 @@ const NoteCreator = ({ onNoteCreated }: ICreateNoteProps) => {
           className={`${s.note_creator} ${s.note_creator_toggled} ${s[noteData?.note_color]}`}
         >
           <InputComponent
-            value={noteData?.note_title}
+            value={noteData && noteData.note_title}
             onChange={(e) => {
               setNoteData({
                 ...noteData,
@@ -94,17 +95,18 @@ const NoteCreator = ({ onNoteCreated }: ICreateNoteProps) => {
             placeholder="Title"
             name="note_title"
             forName="note_title"
-            type="text"
+            type="textarea"
             text={''}
             style={{
               fontSize: '16px',
               fontFamily: 'sans-serif',
               resize: 'none',
+              height: '42px',
               width: '100%',
             }}
           />
           <InputComponent
-            value={noteData?.note_text}
+            value={noteData && noteData.note_text}
             onChange={(e) => {
               setNoteData({
                 ...noteData,
@@ -169,7 +171,12 @@ const NoteCreator = ({ onNoteCreated }: ICreateNoteProps) => {
               )}
             </span>
             <span className={s.actions_section}>
-              <p className={s.cancel} onClick={() => setToggled(false)}>
+              <p
+                className={s.cancel}
+                onClick={() => {
+                  setToggled(false);
+                }}
+              >
                 Cancel
               </p>
               <span className={s.save}>

@@ -79,6 +79,9 @@
 }
 
 @media (max-width: 768px) {
+  .dashboard {
+    padding: 0 20px;
+  }
   .cards {
     flex-direction: column;
   }

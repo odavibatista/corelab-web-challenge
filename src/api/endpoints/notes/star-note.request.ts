@@ -1,4 +1,5 @@
 import api, { IAPIError } from '../../api';
+import { IHealthCheckResponse } from '../application/healthcheck.request';
 
 export interface IStarNoteRequest {
   note_id: string;
@@ -7,7 +8,7 @@ export interface IStarNoteRequest {
 const starNote = async (
   data: IStarNoteRequest,
   token: string,
-): Promise<{} | IAPIError> => {
+): Promise<IHealthCheckResponse | IAPIError> => {
   const response = await api
     .post(`/notes/star`, data, {
       headers: {

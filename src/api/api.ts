@@ -7,7 +7,7 @@ export interface IAPIError {
 export interface IAPIResponse {
   message: string;
   status: number;
-  data?: any;
+  data?: unknown;
 }
 
 const NEXT_PUBLIC_API = process.env.NEXT_PUBLIC_API;

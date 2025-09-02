@@ -1,4 +1,5 @@
 import api, { IAPIError } from '../../api';
+import { IHealthCheckResponse } from '../application/healthcheck.request';
 
 interface ChangeNoteColorAttributes {
   note_id: string;
@@ -8,7 +9,7 @@ interface ChangeNoteColorAttributes {
 const changeNoteColor = async (
   data: ChangeNoteColorAttributes,
   token: string,
-): Promise<{} | IAPIError> => {
+): Promise<IHealthCheckResponse | IAPIError> => {
   const response = await api
     .post(`/notes/change-color`, data, {
       headers: {

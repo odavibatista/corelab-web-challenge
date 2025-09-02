@@ -1,6 +1,6 @@
 'use client';
 
-import { redirect, useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import s from './styles.module.scss';
 import { z } from 'zod';
 import { useEffect, useState } from 'react';
@@ -12,6 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import login from '../../../api/endpoints/users/login.request';
 import Button from '../../../presentation/components/Button';
 import Link from 'next/link';
+import refreshPage from '../../../server/utils/refresh.function';
 
 const loginSchema = z.object({
   email: z.string().min(14, { message: 'Campo obrigatório.' }),
@@ -24,17 +25,10 @@ export default function LoginScreen() {
   const [errorMessage, setErrorMessage] = useState('');
   const [loginData, setLoginData] = useState<LoginSchemaInterface>();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    getValues,
-  } = useForm<LoginSchemaInterface>({
+  const { register, handleSubmit } = useForm<LoginSchemaInterface>({
     resolver: zodResolver(loginSchema),
     mode: 'all',
   });
-
-  const router = useRouter();
 
   const { modal, setModal, openCloseModal } = useModal();
 
@@ -62,10 +56,11 @@ export default function LoginScreen() {
             return;
           } else {
             sessionStorage.setItem('session', loginReq.token);
+            refreshPage();
             redirect('/dashboard');
           }
-        } catch (error: any) {
-          setError('Ocorreu um erro inesperado. Tente novamente mais tarde.');
+        } catch (error: unknown) {
+          setError((error as Error).message);
           setModal({ message: errorMessage, type: 'error' });
           setLoginData(undefined);
           return;

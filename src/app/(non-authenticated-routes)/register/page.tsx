@@ -1,6 +1,6 @@
 'use client';
 
-import { redirect, useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import s from './styles.module.scss';
 import { z } from 'zod';
 import { useEffect, useState } from 'react';
@@ -12,6 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '../../../presentation/components/Button';
 import Link from 'next/link';
 import userRegister from '../../../api/endpoints/users/register.request';
+import refreshPage from '../../../server/utils/refresh.function';
 
 const registerSchema = z.object({
   name: z.string().min(2, { message: 'Campo obrigatório.' }),
@@ -26,17 +27,10 @@ export default function RegisterScreen() {
   const [errorMessage, setErrorMessage] = useState('');
   const [registerData, setRegisterData] = useState<RegisterSchemaInterface>();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    getValues,
-  } = useForm<RegisterSchemaInterface>({
+  const { register, handleSubmit } = useForm<RegisterSchemaInterface>({
     resolver: zodResolver(registerSchema),
     mode: 'all',
   });
-
-  const router = useRouter();
 
   const { modal, setModal, openCloseModal } = useModal();
 
@@ -66,10 +60,11 @@ export default function RegisterScreen() {
             return;
           } else {
             sessionStorage.setItem('session', registerReq.token);
+            refreshPage();
             redirect('/dashboard');
           }
-        } catch (error: any) {
-          setError('Ocorreu um erro inesperado. Tente novamente mais tarde.');
+      } catch (error: unknown) {
+        setError((error as Error).message);
           setModal({ message: errorMessage, type: 'error' });
           setRegisterData(undefined);
         }
