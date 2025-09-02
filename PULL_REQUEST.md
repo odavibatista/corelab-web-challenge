@@ -103,6 +103,3 @@ Após a configuração, rode o comando `npm install` para instalar as dependênc
 Por fim, rode o comando `npm run start:dev` para iniciar a aplicação em modo de desenvolvimento, e assim que a aplicação iniciar, é possível acessar sua documentação através da URL `http://localhost:5000/swagger`.
 
 No repositório do front-end, rode o comando `npm install`, e em seguida `npm run dev` para iniciar a aplicação front-end.
-
-#### Vídeo
-Para assistir o vídeo mostrando a execução do projeto integrado, clique [aqui](https://drive.google.com/file/d/1OrNm63xbSP7wizEVmFbTeeTPdOwhwXQT/view?usp=sharing)!

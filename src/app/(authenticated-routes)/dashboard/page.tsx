@@ -44,8 +44,8 @@ export default function DashboardPage() {
       } else {
         setNotes(data);
       }
-    } catch (error: unknown) {
-      setError((error as Error).message);
+    } catch (error: any) {
+      setError(error.message);
     }
   };
 
@@ -72,8 +72,8 @@ export default function DashboardPage() {
           setNotes(notes);
         }
       }
-    } catch (error: unknown) {
-      setError((error as Error).message);
+    } catch (error: any) {
+      setError(error.message);
     }
   };
 
@@ -102,8 +102,8 @@ export default function DashboardPage() {
           setNotes(notes);
         }
       }
-    } catch (error: unknown) {
-      setError((error as Error).message);
+    } catch (error: any) {
+      setError(error.message);
     }
   };
 
@@ -130,8 +130,8 @@ export default function DashboardPage() {
           setNotes(notes);
         }
       }
-    } catch (error: unknown) {
-      setError((error as Error).message);
+    } catch (error: any) {
+      setError(error.message);
     }
   };
 
@@ -153,8 +153,8 @@ export default function DashboardPage() {
           setNotes(notes);
         }
       }
-    } catch (error: unknown) {
-      setError((error as Error).message);
+    } catch (error: any) {
+      setError(error.message);
     }
   };
 
